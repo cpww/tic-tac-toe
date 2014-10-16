@@ -13,30 +13,30 @@
 ///////////////////////////////////////
 // Vector Prototype & Constructor
 ///////////////////////////////////////
-var vectorPrototype = {
-  value: null,
-  set: function(val) {
-    this.value = val;
-    console.log('Vector set to: ' + val);
-  }
-};
-
 function Vector() {
+    this.value = null;
     console.log('Vector Created!');
 };
 
-Vector.prototype = vectorPrototype;
+Vector.prototype.set = function(val) {
+    this.value = val;
+    console.log('Vector set to: ' + val);
+}
 
 
 ///////////////////////////////////////
 // Grid Prototype & Constructor
 ///////////////////////////////////////
-var gridPrototype = {
-  width: 3,
-  vectors: [new Vector(), new Vector(), new Vector(),
-            new Vector(), new Vector(), new Vector(),
-            new Vector(), new Vector(), new Vector()],
-  display: function() {
+
+function Grid() {
+    this.width = 3;
+    this.vectors = [new Vector(), new Vector(), new Vector(),
+                    new Vector(), new Vector(), new Vector(),
+                    new Vector(), new Vector(), new Vector()];
+    console.log('Grid Created!');
+};
+
+Grid.prototype.display = function() {
     var self = this;
     return this.vectors.reduce( function(dispSoFar, vector, index) {
       var curVal = vector.value;
@@ -55,21 +55,16 @@ var gridPrototype = {
 
       return dispSoFar + curVal;
     }, '')
-  },
-  setVector: function(index, value) {
+}
+
+Grid.prototype.setVector = function(index, value) {
     console.log('Setting Vector: ' + index + ' to: ' + value);
     this.vectors[index].set(value);
-  },
-  checkForWin: function(index, value) {
+}
+
+Grid.prototype.checkForWin = function(index, value) {
     var setValue = value;
-  }
-};
-
-function Grid() {
-    console.log('Grid Created!');
-};
-Grid.prototype = gridPrototype;
-
+}
 
 ///////////////////////////////////////
 // Sanity Code
