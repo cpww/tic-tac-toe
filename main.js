@@ -13,33 +13,32 @@
 /*/////////////////////////////////////
 // Vector Prototype & Constructor
 /////////////////////////////////////*/
-var vectorPrototype = {
-  value: null,
-  set: function(val) {
-    this.value = val;
-    console.log('Vector set to: ' + val);
-  }
-};
-
 function Vector(x, y) {
     this.x = x;
     this.y = y;
+    this.value = null;
     console.log('Vector Created!');
 };
 
-Vector.prototype = vectorPrototype;
+Vector.prototype.set = function(val) {
+    this.value = val;
+    console.log('Vector set to: ' + val);
+}
 
 
 /*/////////////////////////////////////
 // Grid Prototype & Constructor
 /////////////////////////////////////*/
-var gridPrototype = {
-  width: 3,
-  height: 3,
-  vectors: [new Vector(0, 0), new Vector(1, 0), new Vector(2, 0),
-            new Vector(0, 1), new Vector(1, 1), new Vector(2, 1),
-            new Vector(0, 2), new Vector(1, 2), new Vector(2, 2)],
-  display: function() {
+function Grid() {
+    this.width = 3;
+    this.height = 3;
+    this.vectors = [new Vector(0, 0), new Vector(1, 0), new Vector(2, 0),
+                    new Vector(0, 1), new Vector(1, 1), new Vector(2, 1),
+                    new Vector(0, 2), new Vector(1, 2), new Vector(2, 2)];
+    console.log('Grid Created!');
+};
+
+Grid.prototype.display = function() {
     var self = this;
     return this.vectors.reduce( function(dispSoFar, vector, index) {
       var curVal = vector.value;
@@ -58,30 +57,28 @@ var gridPrototype = {
 
       return dispSoFar + curVal;
     }, '')
-  },
-  setVector: function(index, value) {
+}
+
+Grid.prototype.setVector = function(index, value) {
     console.log('Setting Vector: ' + index + ' to: ' + value);
     this.vectors[index].set(value);
-  },
-  getSurroundingVectors: function(index) {
+}
+
+Grid.prototype.getSurroundingVectors = function(index) {
     var self = this;
     var translations = [[-1, -1], [0, -1], [1, -1],
                         [-1,  0],          [1,  0],
                         [-1,  1], [0,  1], [1,  1]];
-    var vector = this.vectors[index];
+    var vector = self.vectors[index];
     return translations.map(function(translation) {
+        console.log('translation: ' + translation + ', vector.x: ' + vector.x);
         return new Vector(vector.x + translation[0], vector.y + translation[1]);
     })
-  },
-  checkForWin: function(index, value) {
+}
+  
+Grid.prototype.checkForWin = function(index, value) {
     var surroundingVectors = this.getSurroundingVectors(index);
-  }
-};
-
-function Grid() {
-    console.log('Grid Created!');
-};
-Grid.prototype = gridPrototype;
+}
 
 
 /*/////////////////////////////////////
