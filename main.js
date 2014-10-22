@@ -13,7 +13,9 @@
 /*/////////////////////////////////////
 // Vector Prototype & Constructor
 /////////////////////////////////////*/
-function Vector() {
+function Vector(x, y) {
+    this.x = x;
+    this.y = y;
     this.value = null;
     console.log('Vector Created!');
 };
@@ -27,12 +29,12 @@ Vector.prototype.set = function(val) {
 /*/////////////////////////////////////
 // Grid Prototype & Constructor
 /////////////////////////////////////*/
-
 function Grid() {
     this.width = 3;
-    this.vectors = [new Vector(), new Vector(), new Vector(),
-                    new Vector(), new Vector(), new Vector(),
-                    new Vector(), new Vector(), new Vector()];
+    this.height = 3;
+    this.vectors = [new Vector(0, 0), new Vector(1, 0), new Vector(2, 0),
+                    new Vector(0, 1), new Vector(1, 1), new Vector(2, 1),
+                    new Vector(0, 2), new Vector(1, 2), new Vector(2, 2)];
     console.log('Grid Created!');
 };
 
@@ -62,9 +64,22 @@ Grid.prototype.setVector = function(index, value) {
     this.vectors[index].set(value);
 }
 
-Grid.prototype.checkForWin = function(index, value) {
-    var setValue = value;
+Grid.prototype.getSurroundingVectors = function(index) {
+    var self = this;
+    var translations = [[-1, -1], [0, -1], [1, -1],
+                        [-1,  0],          [1,  0],
+                        [-1,  1], [0,  1], [1,  1]];
+    var vector = self.vectors[index];
+    return translations.map(function(translation) {
+        console.log('translation: ' + translation + ', vector.x: ' + vector.x);
+        return new Vector(vector.x + translation[0], vector.y + translation[1]);
+    })
 }
+  
+Grid.prototype.checkForWin = function(index, value) {
+    var surroundingVectors = this.getSurroundingVectors(index);
+}
+
 
 /*/////////////////////////////////////
 // Sanity Code
@@ -80,3 +95,4 @@ grid.setVector(0, 'O');
 grid.setVector(8, 'X');
 grid.setVector(6, 'O');
 console.log(grid.display());
+console.log(grid.getSurroundingVectors(1));
