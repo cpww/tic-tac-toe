@@ -65,7 +65,6 @@ Grid.prototype.setVector = function(index, value) {
 }
 
 Grid.prototype.getSurroundingVectors = function(index) {
-    console.log("Here is this:" + this.constructor.name);
     var self = this;    
     var translations = [[-1, -1], [0, -1], [1, -1],
                         [-1,  0],          [1,  0],
