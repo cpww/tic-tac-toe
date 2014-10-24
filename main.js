@@ -65,21 +65,22 @@ Grid.prototype.setVector = function(index, value) {
 }
 
 Grid.prototype.getSurroundingVectors = function(index) {
-    var self = this;
+    var self = this;    
     var translations = [[-1, -1], [0, -1], [1, -1],
                         [-1,  0],          [1,  0],
                         [-1,  1], [0,  1], [1,  1]];
     var vector = self.vectors[index];
     return translations.map(function(translation) {
         console.log('translation: ' + translation + ', vector.x: ' + vector.x);
-        return new Vector(vector.x + translation[0], vector.y + translation[1]);
-    })
+        return self.vectors[vector.x + translation[0] + (vector.y + translation[1]) * self.width];
+    }).filter(function(element) {
+      return element;
+    });
 }
   
 Grid.prototype.checkForWin = function(index, value) {
     var surroundingVectors = this.getSurroundingVectors(index);
 }
-
 
 /*/////////////////////////////////////
 // Sanity Code
