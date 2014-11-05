@@ -79,7 +79,22 @@ Grid.prototype.getSurroundingVectors = function(index) {
 }
   
 Grid.prototype.checkForWin = function(index, value) {
-    var surroundingVectors = this.getSurroundingVectors(index);
+    //var surroundingVectors = this.getSurroundingVectors(index);
+
+    var winCombos = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+    
+    var possibleWinCombos = winCombos.filter(function(element) {
+      return element.indexOf(index) > -1;
+    });
+    
+    var self = this;
+    
+    //The current win combo reduce needs to be refactored into it's own function
+    return possibleWinCombos.reduce(function(previousValue, currentWinCombo) {
+      return previousValue || currentWinCombo.reduce(function(innerPreviousValue, i) {
+        return innerPreviousValue && self.vectors[i].value == value;
+      }, true)
+    }, false)
 }
 
 /*/////////////////////////////////////
@@ -93,7 +108,10 @@ grid = new Grid();
 console.log(grid.display());
 grid.setVector(3, 'X');
 grid.setVector(0, 'O');
+grid.setVector(1, 'O');
+grid.setVector(2, 'O');
 grid.setVector(8, 'X');
 grid.setVector(6, 'O');
 console.log(grid.display());
 console.log(grid.getSurroundingVectors(1));
+console.log(grid.checkForWin(0, '0'));
