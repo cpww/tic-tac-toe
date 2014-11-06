@@ -82,13 +82,17 @@ Grid.prototype.checkForWin = function() {
 
     var winCombos = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
     
-    var self = this;
-    
-    //The current win combo reduce needs to be refactored into it's own function
-    return winCombos.reduce(function(previousValue, currentWinCombo) {
-      return previousValue || currentWinCombo.reduce(function(w,el,i,arr){
-        return w && (arr.length-1 == i || (self.vectors[el].value != null && self.vectors[el].value == self.vectors[arr[i+1]].value))
+    // Helper function that acts on a single win combo, returning "win" true or false
+    var containsWin = function(currentWinCombo) {
+        return currentWinCombo.reduce(function(w,el,i,arr){
+            return w && (arr.length-1 == i || (self.vectors[el].value != null && self.vectors[el].value == self.vectors[arr[i+1]].value));
       }, true)
+    }
+    
+    // Assign this to self in order to access Grid instance from within callbacks
+    var self = this;
+    return winCombos.reduce(function(previousValue, currentWinCombo) {
+      return previousValue || containsWin(currentWinCombo);
     }, false)
 }
 
