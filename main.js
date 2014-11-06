@@ -25,7 +25,6 @@ Vector.prototype.set = function(val) {
     console.log('Vector set to: ' + val);
 }
 
-
 /*/////////////////////////////////////
 // Grid Prototype & Constructor
 /////////////////////////////////////*/
@@ -64,38 +63,50 @@ Grid.prototype.setVector = function(index, value) {
     this.vectors[index].set(value);
 }
 
-Grid.prototype.getSurroundingVectors = function(index) {
-    var self = this;    
-    var translations = [[-1, -1], [0, -1], [1, -1],
-                        [-1,  0],          [1,  0],
-                        [-1,  1], [0,  1], [1,  1]];
-    var vector = self.vectors[index];
-    return translations.map(function(translation) {
-        console.log('translation: ' + translation + ', vector.x: ' + vector.x);
-        return self.vectors[vector.x + translation[0] + (vector.y + translation[1]) * self.width];
-    }).filter(function(element) {
-      return element;
-    });
-}
+// Grid.prototype.getSurroundingVectors = function(index) {
+//     var self = this;    
+//     var translations = [[-1, -1], [0, -1], [1, -1],
+//                         [-1,  0],          [1,  0],
+//                         [-1,  1], [0,  1], [1,  1]];
+//     var vector = self.vectors[index];
+//     return translations.map(function(translation) {
+//         console.log('translation: ' + translation + ', vector.x: ' + vector.x);
+//         return self.vectors[vector.x + translation[0] + (vector.y + translation[1]) * self.width];
+//     }).filter(function(element) {
+//       return element;
+//     });
+// }
   
-Grid.prototype.checkForWin = function(index, value) {
+Grid.prototype.checkForWin = function() {
     //var surroundingVectors = this.getSurroundingVectors(index);
 
     var winCombos = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
     
-    var possibleWinCombos = winCombos.filter(function(element) {
-      return element.indexOf(index) > -1;
-    });
-    
     var self = this;
     
     //The current win combo reduce needs to be refactored into it's own function
-    return possibleWinCombos.reduce(function(previousValue, currentWinCombo) {
-      return previousValue || currentWinCombo.reduce(function(innerPreviousValue, i) {
-        return innerPreviousValue && self.vectors[i].value == value;
+    return winCombos.reduce(function(previousValue, currentWinCombo) {
+      return previousValue || currentWinCombo.reduce(function(w,el,i,arr){
+        return w && (arr.length-1 == i || (self.vectors[el].value != null && self.vectors[el].value == self.vectors[arr[i+1]].value))
       }, true)
     }, false)
 }
+
+
+function Game() {
+  this.grid = new Grid();
+}
+
+Game.prototype.play = function() {
+  while (!this.grid.checkForWin()) {
+    // check availiablity
+    // make move
+    while (!this.validMove()) {}
+  } 
+}
+ 
+
+
 
 /*/////////////////////////////////////
 // Sanity Code
@@ -106,6 +117,7 @@ grid = new Grid();
   //grid.setVector(index, entity.mark)
   //grid.checkForWin(index, entity.mark)
 console.log(grid.display());
+console.log(grid.checkForWin());
 grid.setVector(3, 'X');
 grid.setVector(0, 'O');
 grid.setVector(1, 'O');
@@ -113,5 +125,5 @@ grid.setVector(2, 'O');
 grid.setVector(8, 'X');
 grid.setVector(6, 'O');
 console.log(grid.display());
-console.log(grid.getSurroundingVectors(1));
-console.log(grid.checkForWin(0, '0'));
+// console.log(grid.getSurroundingVectors(1));
+console.log(grid.checkForWin());
