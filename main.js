@@ -71,12 +71,12 @@ Grid.prototype.checkForWin = function() {
     var self = this;
 
     // Fuck reduce
-    return !winCombos.every(function(element, index, array) {
+    return winCombos.some(function(element, index, array) {
 
         var currentCombo = [self.vectors[element[0]].value, self.vectors[element[1]].value, self.vectors[element[2]].value];
 
-        return currentCombo.indexOf(null) > -1 ||
-              !(currentCombo[0] === currentCombo[1] && currentCombo[0] === currentCombo[2]);
+        return currentCombo.indexOf(null) === -1 &&
+               currentCombo[0] === currentCombo[1] && currentCombo[0] === currentCombo[2];
       })
 }
 
