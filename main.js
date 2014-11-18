@@ -80,19 +80,38 @@ Grid.prototype.checkForWin = function() {
       })
 }
 
+/*/////////////////////////////////////
+// Player Prototype & Constructor
+/////////////////////////////////////*/
+var prompt = require('prompt');
+
 function Player(type, value) {
   this.type = type;
   this.value = value;
 }
 
-
-function Game() {
-  this.grid = new Grid();
-  this.players = [new Player('human'), new Player('computer')]
-  this.turn = 0
+Player.prototype.makeMove = function(grid) {
+  if (this.type == 'human') {
+    var vector = null;
+    prompt.start();
+    prompt.get(['move'], function(err, result) {
+      vector = parseInt(result.number, 10);}
+    );
+    return vector;
+  }
+  else {
+    // do things for computers
+  }
 }
 
-Game.prototype.setUpNewGame = function() {
+
+/*/////////////////////////////////////
+// Game Prototype & Constructor
+/////////////////////////////////////*/
+function Game() {
+  this.grid = new Grid();
+  this.players = [new Player('human', 'X'), new Player('human', 'O')]
+  this.turn = 0
   this.currentPlayer = Math.floor(Math.random()*2)
 }
 
@@ -100,7 +119,7 @@ Game.prototype.checkForCatsGame = function() {
   return this.turn == 9;
 }
 
-Game.prototype.getPlayer = function() {
+Game.prototype.getCurrentPlayer = function() {
   if (this.currentPlayer % 2 == 0) {
     this.currentPlayer + 1;
   }
@@ -111,11 +130,11 @@ Game.prototype.getPlayer = function() {
 }
 
 Game.prototype.play = function() {
-  this.setUpNewGame();
   while (!this.grid.checkForWin() || this.checkForCatsGame()) {
     this.turn += 1;
-    val = self.getPlayer().makeMove(this.grid)
-    grid.setVector(val);
+    var currentPlayer = this.getCurrentPlayer();
+    var vector = currentPlayer.makeMove(this.grid)
+    grid.setVector(vector, currentPlayer.value);
   }
 }
 
@@ -140,3 +159,6 @@ grid.setVector(8, 'X');
 grid.setVector(6, 'O');
 console.log(grid.display());
 console.log('Did we win?', grid.checkForWin());
+
+game = new Game();
+game.play();
