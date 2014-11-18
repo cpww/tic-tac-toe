@@ -80,16 +80,42 @@ Grid.prototype.checkForWin = function() {
       })
 }
 
+function Player(type, value) {
+  this.type = type;
+  this.value = value;
+}
+
 
 function Game() {
   this.grid = new Grid();
+  this.players = [new Player('human'), new Player('computer')]
+  this.turn = 0
+}
+
+Game.prototype.setUpNewGame = function() {
+  this.currentPlayer = Math.floor(Math.random()*2)
+}
+
+Game.prototype.checkForCatsGame = function() {
+  return this.turn == 9;
+}
+
+Game.prototype.getPlayer = function() {
+  if (this.currentPlayer % 2 == 0) {
+    this.currentPlayer + 1;
+  }
+  else {
+    this.currentPlayer - 1;
+  }
+  return this.players[this.currentPlayer]
 }
 
 Game.prototype.play = function() {
-  while (!this.grid.checkForWin()) {
-    // check availiablity
-    // make move
-    while (!this.validMove()) {}
+  this.setUpNewGame();
+  while (!this.grid.checkForWin() || this.checkForCatsGame()) {
+    this.turn += 1;
+    val = self.getPlayer().makeMove(this.grid)
+    grid.setVector(val);
   }
 }
 
