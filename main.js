@@ -83,25 +83,20 @@ Grid.prototype.checkForWin = function() {
 /*/////////////////////////////////////
 // Player Prototype & Constructor
 /////////////////////////////////////*/
-var prompt = require('prompt');
-
 function Player(type, value) {
   this.type = type;
   this.value = value;
 }
+var prompt = require('sync-prompt').prompt;
+
+function onErr(err) {
+  console.log(err);
+  return 1;
+}
 
 Player.prototype.makeMove = function(grid) {
-  if (this.type == 'human') {
-    var vector = null;
-    prompt.start();
-    prompt.get(['move'], function(err, result) {
-      vector = parseInt(result.number, 10);}
-    );
-    return vector;
-  }
-  else {
-    // do things for computers
-  }
+  var vec = prompt('Enter the value');
+  grid.setVector(vec, this.value);
 }
 
 
@@ -133,8 +128,7 @@ Game.prototype.play = function() {
   while (!this.grid.checkForWin() || this.checkForCatsGame()) {
     this.turn += 1;
     var currentPlayer = this.getCurrentPlayer();
-    var vector = currentPlayer.makeMove(this.grid)
-    grid.setVector(vector, currentPlayer.value);
+    currentPlayer.makeMove(this.grid)
   }
 }
 
@@ -162,3 +156,4 @@ console.log('Did we win?', grid.checkForWin());
 
 game = new Game();
 game.play();
+
