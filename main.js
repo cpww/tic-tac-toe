@@ -80,19 +80,33 @@ Grid.prototype.checkForWin = function() {
       })
 }
 
+/*/////////////////////////////////////
+// Player Prototype & Constructor
+/////////////////////////////////////*/
 function Player(type, value) {
   this.type = type;
   this.value = value;
 }
+var prompt = require('sync-prompt').prompt;
 
-
-function Game() {
-  this.grid = new Grid();
-  this.players = [new Player('human'), new Player('computer')]
-  this.turn = 0
+function onErr(err) {
+  console.log(err);
+  return 1;
 }
 
-Game.prototype.setUpNewGame = function() {
+Player.prototype.makeMove = function(grid) {
+  var vec = prompt('Enter the value');
+  grid.setVector(vec, this.value);
+}
+
+
+/*/////////////////////////////////////
+// Game Prototype & Constructor
+/////////////////////////////////////*/
+function Game() {
+  this.grid = new Grid();
+  this.players = [new Player('human', 'X'), new Player('human', 'O')]
+  this.turn = 0
   this.currentPlayer = Math.floor(Math.random()*2)
 }
 
@@ -100,7 +114,7 @@ Game.prototype.checkForCatsGame = function() {
   return this.turn == 9;
 }
 
-Game.prototype.getPlayer = function() {
+Game.prototype.getCurrentPlayer = function() {
   if (this.currentPlayer % 2 == 0) {
     this.currentPlayer + 1;
   }
@@ -111,11 +125,10 @@ Game.prototype.getPlayer = function() {
 }
 
 Game.prototype.play = function() {
-  this.setUpNewGame();
   while (!this.grid.checkForWin() || this.checkForCatsGame()) {
     this.turn += 1;
-    val = self.getPlayer().makeMove(this.grid)
-    grid.setVector(val);
+    var currentPlayer = this.getCurrentPlayer();
+    currentPlayer.makeMove(this.grid)
   }
 }
 
@@ -140,3 +153,7 @@ grid.setVector(8, 'X');
 grid.setVector(6, 'O');
 console.log(grid.display());
 console.log('Did we win?', grid.checkForWin());
+
+game = new Game();
+game.play();
+
