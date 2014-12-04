@@ -1,15 +1,3 @@
-// 1st try to win
-// 2nd prevent loss
-// 3rd go corners
-// Else take whatever and it should be a cats game. Meow.
-
-// Player obj
-// Board obj
-// Comp obj
-
-// Bool on vector and X or O
-
-
 /*/////////////////////////////////////
 // Vector Prototype & Constructor
 /////////////////////////////////////*/
@@ -103,8 +91,13 @@ var count_in_array = function(array, val) {
 Player.prototype.makeMove = function(grid) {
   var invalidMove = true;
   if (this.type == 'human') {
+    open_indexes = grid.vectors.filter(function(vector) {
+      return vector.value == null;
+    }).map(function(vector, i) {
+      return grid.vectors.indexOf(vector)+1;
+    });
     while (invalidMove) {
-      var index = prompt('Enter a number: ') - 1;
+      var index = prompt('Enter a number from this list of available spaces ' + open_indexes + ': ') - 1;
       if ([0,1,2,3,4,5,6,7,8].indexOf(index) > -1 && grid.vectors[index].value == null) {
         grid.setVector(index, this.value);
         invalidMove = false;
@@ -155,7 +148,15 @@ Player.prototype.makeMove = function(grid) {
     }
     //console.log('computer index is now: ' + index);
     if (index == null) {
-      // No block?  Try a corner...
+      // No block?  Try for center...
+      //console.log('computer is attempting to center');
+      if (grid.vectors[4].value == null) {
+        index = 4;
+      }
+    }
+    //console.log('computer index is now: ' + index);
+    if (index == null) {
+      // No center?  Try a corner...
       //console.log('computer is attempting to corner');
       var corners = [0, 2, 6, 8];
       var open_corners = corners.filter(function(corner) {
@@ -188,7 +189,6 @@ Player.prototype.makeMove = function(grid) {
 /////////////////////////////////////*/
 function Game() {
   this.grid = new Grid();
-  this.players = [new Player('human', 'X'), new Player('computer', 'O')]
   this.turn = 0
   this.currentPlayer = Math.floor(Math.random()*2)
 }
@@ -207,9 +207,33 @@ Game.prototype.getCurrentPlayer = function() {
   return this.players[this.currentPlayer]
 }
 
+Game.prototype.setUpPlayers = function() {
+  console.log('Choose your player option: 1 for human v human, 2 for human v computer, 3 for computer v computer');
+  var invalidMove = true;
+  while (invalidMove) {
+    var choice = parseInt(prompt('Enter a number: '));
+    if ([1,2,3].indexOf(choice) > -1) {
+      if (choice == 1) {
+        this.players = [new Player('human', 'X'), new Player('human', 'O')]
+      }
+      else if (choice == 2) {
+        this.players = [new Player('human', 'X'), new Player('computer', 'O')]
+      }
+      else {
+        this.players = [new Player('computer', 'X'), new Player('computer', 'O')]
+      }
+      invalidMove = false;
+    }
+    else {
+      console.log("Please enter a valid number");
+    }
+  }
+}
+
 Game.prototype.play = function() {
   console.log('Welcome to Tic-Tac-Toe!\n' +
     'To move, Enter a number from 1-9 when prompted.');
+  this.setUpPlayers();
   console.log(this.grid.display());
   while (!this.grid.hasWin() && !this.catsGame()) {
     this.turn += 1;
