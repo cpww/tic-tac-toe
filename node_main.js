@@ -1,19 +1,3 @@
-// 1st try to win
-// 2nd prevent loss
-// 3rd go corners
-// Else take whatever and it should be a cats game. Meow.
-
-// Player obj
-// Board obj
-// Comp obj
-
-// Bool on vector and X or O
-function foobar(mah) { console.log('foobar!' + mah + '/' + mah.id); }
-//document.getElementById('1').addEventListener('click', foobar, this)
-//document.getElementById('2').addEventListener('click', foobar, this)
-//document.getElementById('1').addEventListener('click', wgas)
-
-
 /*/////////////////////////////////////
 // Vector Prototype & Constructor
 /////////////////////////////////////*/
