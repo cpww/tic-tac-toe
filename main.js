@@ -87,7 +87,7 @@ function Player(type, value) {
   this.type = type;
   this.value = value;
 }
-var prompt = require('sync-prompt').prompt;
+//var prompt = require('sync-prompt').prompt;
 
 function onErr(err) {
   //console.log(err);
@@ -247,7 +247,3 @@ Game.prototype.play = function() {
 //grid.setVector(6, 'O');
 //console.log(grid.display());
 //console.log('Did we win?', grid.hasWin());
-
-game = new Game();
-game.play();
-
